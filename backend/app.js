@@ -1,11 +1,13 @@
+
+// index.js or app.js
+import 'dotenv/config'; // This line replaces require('dotenv').config()
 import express from "express";
-import mongoose from "mongoose";
 import { productsRoutes } from "./routes/productsRoutes.js";
 import { connectDB } from "./db/connect.js";
 const app = express();
 
 
-const PORT = 3000;
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
