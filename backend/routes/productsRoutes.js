@@ -6,9 +6,8 @@ import {
 const productsRoutes = express.Router();
 
 // Define your route
-productsRoutes.get("/products/get_all_Products", getAllProducts);
-productsRoutes.get(
-  "/products/get_all_Products_for_testing",
+productsRoutes.get("/get_all_Products", getAllProducts);
+productsRoutes.get("/get_all_Products_for_testing",
   getAllProductsTesting
 );
 

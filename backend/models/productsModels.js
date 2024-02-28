@@ -11,10 +11,7 @@ const productSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: {
-            values: ["electronics", "men's cloth", "jewellery", "electronics"], // Note: "electronics" is repeated, you may want to fix it
-            message: `{VALUE} is not supported`,
-        },
+
         required: true,
     },
     rating: {
@@ -26,3 +23,4 @@ const productSchema = new mongoose.Schema({
 const Product = mongoose.model("Product", productSchema);
 
 export { Product };
+
