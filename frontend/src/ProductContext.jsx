@@ -18,8 +18,7 @@ export const ProductProvider = ({ children }) => {
     fetchCategories();
   }, [searchTerm, sortOption]);
 
-  const apiUrl = "http://localhost:5000/app/products/get_all_Products_for_testing";
-
+  const apiUrl = "https://fakestoreapi.com/products";
   const fetchProducts = async () => {
     setLoading(true);
 

@@ -1,23 +1,124 @@
-import { Product } from "../models/productsModels.js";
+// controllers/productsControllers.js
+import { ProductData } from "../models/productsModels.js";
+
+// Controller to create a new product
+const createProduct = async (req, res) => {
+  const { title, brand, category, price, description } = req.body;
+
+  try {
+    const newProduct = await ProductData.create({
+      title,
+      brand,
+      category,
+      price,
+      description,
+    });
+
+    return res.status(201).json({
+      status: "Success",
+      message: "Product created successfully",
+      data: newProduct,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      status: "Failed",
+      message: "An error occurred while creating the product",
+      error: err.message,
+    });
+  }
+};
+
+// Controller to delete a product by ID
+const deleteProduct = async (req, res) => {
+  const productId = req.params.id;
+
+  try {
+    if (!productId) {
+      return res.status(400).json({
+        status: "Failed",
+        message: "Product ID is required in the URL parameters",
+      });
+    }
+
+    const deletedProduct = await ProductData.findByIdAndDelete(productId);
+
+    if (!deletedProduct) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "Product not found",
+      });
+    }
+
+    return res.status(200).json({
+      status: "Success",
+      message: "Product deleted successfully",
+      data: deletedProduct,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      status: "Failed",
+      message: "An error occurred while deleting the product",
+      error: err.message,
+    });
+  }
+};
+
+// Controller to get a single product by ID
+const getProduct = async (req, res) => {
+  const productId = req.params.id;
+
+  try {
+    if (!productId) {
+      return res.status(400).json({
+        status: "Failed",
+        message: "Product ID is required in the URL parameters",
+      });
+    }
+
+    const product = await ProductData.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "Product not found",
+      });
+    }
+
+    return res.status(200).json({
+      status: "Success",
+      message: "Product fetched successfully",
+      data: product,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      status: "Failed",
+      message: "An error occurred while fetching the product",
+      error: err.message,
+    });
+  }
+};
+
+// Controller to get all products
 const getAllProducts = async (req, res) => {
-    const {title,price} = req.query;
-    const queryObject = {};
-    if(title){
-        queryObject.title = title;
-    }
-    if(price){
-       
-        queryObject.price = price;
-    }
-    console.log(queryObject);
-    
-    
-    const myData = await Product.find(queryObject);
- res.status(200).json({ myData });
-  };
-  
-  const getAllProductsTesting = async (req, res) => {
-    const myData = await Product.find({});
- res.status(200).json(myData);
-  };
-  export { getAllProducts, getAllProductsTesting };
+  try {
+    const allProducts = await ProductData.find();
+
+    return res.status(200).json({
+      status: "Success",
+      message: "All products fetched successfully",
+      data: allProducts,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      status: "Failed",
+      message: "An error occurred while fetching all products",
+      error: err.message,
+    });
+  }
+};
+
+export { createProduct, deleteProduct, getProduct, getAllProducts };
