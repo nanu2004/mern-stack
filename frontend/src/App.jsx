@@ -1,34 +1,24 @@
-// App.jsx
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import Category from "./Category";
-import Home from "./Home";
-import Header from "./Header";
-import { ProductProvider } from "./ProductContext";
-import Card from './Card';
-import { CartProvider } from './CartContext';
-import { LoginProvider } from './LoginContext';
-import Login from './Login';
-
+import { Layout } from "./Layout";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import  Product  from "./Product";
+import { ProductViewPage } from "./ProductViewPage";
+import { ProductCart } from "./ProductCart";
 function App() {
   return (
-    <Router>
-      <ProductProvider>
-        <CartProvider>
-          <LoginProvider>
-            {/* Wrap the entire application with ProductProvider */}
-            <Header />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/category/*" element={<Category />} />
-              <Route path="/card" element={<Card />} />
-              <Route path="/login" element={<Login />} />
-            </Routes>
-          </LoginProvider>
-        </CartProvider>
-      </ProductProvider>
-    </Router>
+    <div>
+      <BrowserRouter>
+        <Routes>
+          {/* hun  appa ehnu parent bna lena eh route nu */}
+          <Route path="/" element={<Layout />}>
+          <Route path="/products" element={<Product />} />
+
+            <Route path="/product_Details/:id" element={<ProductViewPage />} />
+          </Route>
+          {/* here , out of parent  */}
+          <Route path="/cart" element={<ProductCart />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
