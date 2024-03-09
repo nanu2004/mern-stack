@@ -120,5 +120,33 @@ const getAllProducts = async (req, res) => {
     });
   }
 };
+// now our work is done
+const getProductsByCategory = async (req, res) => {
+  try {
+    // get data from request body
+    const category = req.params.category.toLowerCase();
+    // get data from database
+    const filterProducts = await ProductData.find({ category });
+    // check whether data is true( if data is true then return as response true json data with filterd product)
+    if (filterProducts.length) {
+      res.json({
+        totalProducts: filterProducts.length,
+        filterProducts,
+      });
+    } else {
+      res.json({
+        message: "No Filtered data found / Plese re-check your category!",
+      });
+    }
+  } catch (err) {
+    console.log(err.message);
+    res.json({
+      message: "error while fetching data",
+    });
+  }
+};
 
-export { createProduct, deleteProduct, getProduct, getAllProducts };
+
+
+
+export { createProduct, deleteProduct, getProduct, getAllProducts,getProductsByCategory };

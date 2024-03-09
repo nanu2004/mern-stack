@@ -1,15 +1,15 @@
+import React from 'react';
 import Navigations from "./Navigations";
+import Footer from "./Footer";
 import { Outlet } from "react-router-dom";
-// import { MainProductPage } from "./UserComponents/MainProductPage";
-import { Footer } from "./Footer";
+import { Category } from './CategoryItems/Category';
 
 function Layout() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navigations />
-      {/* <MainProductPage /> */}
-      <Outlet />{" "}
-      {/* hun eh ikk tra da khali box ban gya jithe appa kus v rakh skde a... */}
+      <Category />
+      <Outlet /> {/* Use Outlet to render child components */}
       <Footer />
     </div>
   );

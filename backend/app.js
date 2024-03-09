@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 import cors from 'cors';
 
 // Import routes and database connection
-import { productRoutes } from "./routes/productRoutes.js";
+import { productsRoutes } from "./routes/productsRoutes.js";
 import { connectDB } from "./db/connect.js";
 
 // Create an Express application
@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 });
 
 // Routes
-app.use("/app", productRoutes);
+app.use("/app", productsRoutes);
 
 // Connect to the MongoDB database
 connectDB();

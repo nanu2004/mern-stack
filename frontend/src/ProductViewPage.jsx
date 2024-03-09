@@ -3,10 +3,11 @@ import { useLocation, useNavigate } from "react-router";
 function ProductViewPage() {
   // we can use useLocation to access our data from pass past component (now where is redirect..)
   const navigate = useNavigate();
+  
   const { state } = useLocation();
   const product = state;
   console.log("Product Data:", product);
-  function handleCart() {wat
+  function handleCart() {
     navigate("/cart");
   }
   return (
