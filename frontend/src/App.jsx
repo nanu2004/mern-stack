@@ -9,7 +9,7 @@ import { Lipsticks } from "./CategoryItems/Lipsticks";
 import Skincare from "./CategoryItems/Skincare";
 import { Concealer } from "./CategoryItems/Concealer";
 import { Foundation } from "./CategoryItems/Foundation";
-  // Renamed the component
+import { AddItemsToBag } from "./bag/AddItemsToBag";
 
 function App() {
   return (
@@ -27,6 +27,7 @@ function App() {
             <Route path="category/Lipsticks" element={<Lipsticks />} />
             <Route path="category/skincare" element={<Skincare />} />
             <Route path="category/Concealer" element={<Concealer />} />
+            <Route path="bag" element={<AddItemsToBag />} />
           </Route>
           <Route path="/cart" element={<ProductCart />} />
         </Routes>
