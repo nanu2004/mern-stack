@@ -1,13 +1,18 @@
+// db/connect.js
+
 import mongoose from "mongoose";
-const URL = "mongodb+srv://nainamanchanda9:blzJTRAvWLHv40mU@naina.6qyqohb.mongodb.net/?retryWrites=true&w=majority&appName=naina";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(URL);
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log("Connected to MongoDB");
   } catch (error) {
     console.error("Error connecting to MongoDB:", error.message);
     process.exit(1);
   }
 };
+
 export { connectDB };

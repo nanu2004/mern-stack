@@ -33,7 +33,7 @@ function AddItemsToBag() {
             <p className="text-gray-600">Price: ${item.price.toFixed(2)}</p>
             {/* Remove button */}
             <button
-              className="mt-2 text-red-600 hover:underline cursor-pointer"
+              className="mt-2 text-red-600  cursor-pointer bg-transparent border border-solid border-red-500 px-2 py-1 rounded transition duration-300 ease-in-out hover:bg-red-500 hover:text-white"
               onClick={() => handleRemoveFromCart(item._id)}
             >
               Remove
