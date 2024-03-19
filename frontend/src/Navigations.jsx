@@ -1,4 +1,5 @@
-// this is temporory data inside here/tempo design
+import React from 'react';
+import { Link } from 'react-router-dom'; // Import Link component
 
 function Navigations() {
     return (
@@ -9,18 +10,13 @@ function Navigations() {
               <span className="font-bold text-lg">Your Logo</span>
             </div>
             <div className="hidden md:flex space-x-4">
-              <a href="#" className="text-white hover:text-gray-300">
-                Home
-              </a>
-              <a href="#" className="text-white hover:text-gray-300">
-                Shop
-              </a>
-              <a href="#" className="text-white hover:text-gray-300">
-                About Us
-              </a>
-              <a href="#" className="text-white hover:text-gray-300">
-                Contact
-              </a>
+              {/* Replace anchor tags with Link components */}
+              <Link to="/" className="text-white hover:text-gray-300">Home</Link>
+              <Link to="/products" className="text-white hover:text-gray-300">Shop</Link>
+              <Link to="/about" className="text-white hover:text-gray-300">About Us</Link>
+              <Link to="/contact" className="text-white hover:text-gray-300">Contact</Link>
+              <Link to="/bag" className="text-white hover:text-gray-300">Bag</Link>
+              <Link to="/cart" className="text-white hover:text-gray-300">Add to Cart</Link>
             </div>
             <div className="md:hidden">
               {/* Add your mobile menu icon here */}

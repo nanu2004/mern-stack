@@ -1,39 +1,47 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function AddItemsToBag() {
-  // Retrieve cart items from localStorage
-  const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-
-  // Calculate subtotal and total
+  const [cartItems, setCartItems] = React.useState(JSON.parse(localStorage.getItem('cartItems')) || []);
   const subtotal = cartItems.reduce((total, item) => total + item.price, 0);
   const total = subtotal; // You can customize this based on your logic
 
-  // Function to remove an item from the cart
   const handleRemoveFromCart = (productId) => {
     const updatedCartItems = cartItems.filter((item) => item._id !== productId);
     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-    window.location.reload(); // Refresh the page to reflect the updated cart
+    setCartItems(updatedCartItems); // Update the cartItems state
   };
 
+  const handleConfirm = () => {
+    // Implement your confirmation logic here
+    alert('Order confirmed!');
+  };
+
+  // Check if cartItems array is empty
+  if (cartItems.length === 0) {
+    return null; // If cart is empty, return null to prevent rendering
+  }
+
   return (
-    <div className="max-w-md mt-8 p-4 rounded-md shadow-md bg-gray-600 absolute top-10 right-10">
-      <h2 className="text-2xl font-bold mb-4">Add Items to Trolley</h2>
+    <div className="max-w-sm mt-8 p-2 rounded-md shadow-md bg-gray-600 absolute top-10 right-10">
+      <h2 className="text-lg font-bold mb-2">Add Items to Trolley</h2>
       {/* Display items */}
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid gap-2">
+        {/* Display items */}
         {cartItems.map((item, index) => (
-          <div key={index} className="bg-white p-4 rounded-md shadow-md">
+          <div key={index} className="bg-white p-2 rounded-md shadow-md">
             <img
-              src="https://media.istockphoto.com/id/1408439145/photo/autumn-skincare-and-autumn-makeup-concept-with-beauty-products-on-table.webp?s=612x612&w=is&k=20&c=KwlmYXDOOaSx0UdU2R_xnQ-SMT22k1MS2VXoQgdnfyg=" // Assuming the image URL is stored in the 'image' property of each cart item
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyFA1weAuutW-EX2CiNGwJYpIn_r95fpoTwJ7_10nTbg&s"// Assuming imageURL exists in item
               alt={item.title}
-              className="mb-4 object-cover h-32 w-full rounded-md"
+              className="mb-2 object-cover h-24 w-full rounded-md"
             />
-            <p className="text-lg font-bold">{item.title}</p>
-            <p className="text-gray-600">Brand: {item.brand}</p>
-            <p className="text-gray-600">Description: {item.description}</p>
-            <p className="text-gray-600">Price: ${item.price.toFixed(2)}</p>
+            <p className="text-md font-bold">{item.title}</p>
+            <p className="text-gray-500 text-xs">Brand: {item.brand}</p>
+            <p className="text-gray-500 text-xs">Description: {item.description}</p>
+            <p className="text-gray-500 text-xs">Price: ${item.price.toFixed(2)}</p>
             {/* Remove button */}
             <button
-              className="mt-2 text-red-600  cursor-pointer bg-transparent border border-solid border-red-500 px-2 py-1 rounded transition duration-300 ease-in-out hover:bg-red-500 hover:text-white"
+              className="text-red-600 bg-red-100 border border-red-400 px-1 py-0.5 rounded transition duration-300 ease-in-out hover:bg-red-200 text-xs"
               onClick={() => handleRemoveFromCart(item._id)}
             >
               Remove
@@ -43,10 +51,21 @@ function AddItemsToBag() {
       </div>
 
       {/* Display Subtotal And Total */}
-      <div className="flex justify-start items-start flex-col gap-5">
-        <span>Subtotal: ₹ {subtotal.toFixed(2)}</span>
-        <span>Total: ₹ {total.toFixed(2)}</span>
+      <div className="flex flex-col gap-1">
+        <span className="text-white text-xs">Subtotal: ₹ {subtotal.toFixed(2)}</span>
+        <span className="text-white text-xs">Total: ₹ {total.toFixed(2)}</span>
       </div>
+
+      {/* Confirm Button */}
+      <button
+        className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 mt-4"
+        onClick={handleConfirm}
+      >
+        Confirm
+      </button>
+      
+      {/* Link to ProductCart */}
+      <Link to="/cart" className="text-blue-500 mt-2 block underline">Go to Product Cart</Link>
     </div>
   );
 }
