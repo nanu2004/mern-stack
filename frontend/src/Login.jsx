@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -32,10 +32,7 @@ const Login = () => {
     try {
       const { data } = await axios.post(
         "http://localhost:3000/auth/login",
-        {
-          ...inputValue,
-        },
-        { withCredentials: true }
+        inputValue
       );
       console.log(data);
       const { success, message } = data;
@@ -62,7 +59,10 @@ const Login = () => {
       <h2 className="text-2xl font-bold mb-4">Login Account</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700"
+          >
             Email
           </label>
           <input
@@ -75,7 +75,10 @@ const Login = () => {
           />
         </div>
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700"
+          >
             Password
           </label>
           <input
@@ -87,11 +90,17 @@ const Login = () => {
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
           />
         </div>
-        <button type="submit" className="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+        <button
+          type="submit"
+          className="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
           Submit
         </button>
         <span className="text-gray-600">
-          Don't have an account? <Link to={"/signup"} className="text-blue-600 hover:text-blue-800">Signup</Link>
+          Do not have an account?{" "}
+          <Link to={"/signup"} className="text-blue-600 hover:text-blue-800">
+            Signup
+          </Link>
         </span>
       </form>
       <ToastContainer />

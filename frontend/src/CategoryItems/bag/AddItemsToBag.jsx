@@ -23,25 +23,25 @@ function AddItemsToBag() {
   }
 
   return (
-    <div className="max-w-sm mt-8 p-2 rounded-md shadow-md bg-gray-600 absolute top-10 right-10">
-      <h2 className="text-lg font-bold mb-2">Add Items to Trolley</h2>
+    <div className="max-w-xs mt-8 p-1 rounded-md shadow-md bg-gray-600 absolute top-10 right-10">
+      <h2 className="text-xs font-bold mb-1">Add Items to Trolley</h2>
       {/* Display items */}
-      <div className="grid gap-2">
+      <div className="grid gap-1">
         {/* Display items */}
         {cartItems.map((item, index) => (
-          <div key={index} className="bg-white p-2 rounded-md shadow-md">
+          <div key={index} className="bg-white p-1 rounded-md shadow-md">
             <img
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyFA1weAuutW-EX2CiNGwJYpIn_r95fpoTwJ7_10nTbg&s"// Assuming imageURL exists in item
               alt={item.title}
-              className="mb-2 object-cover h-24 w-full rounded-md"
+              className="mb-1 object-cover h-12 w-full rounded-md"
             />
-            <p className="text-md font-bold">{item.title}</p>
-            <p className="text-gray-500 text-xs">Brand: {item.brand}</p>
-            <p className="text-gray-500 text-xs">Description: {item.description}</p>
-            <p className="text-gray-500 text-xs">Price: ${item.price.toFixed(2)}</p>
+            <p className="text-xxs font-bold">{item.title}</p>
+            <p className="text-gray-500 text-xxs">Brand: {item.brand}</p>
+            <p className="text-gray-500 text-xxs">Description: {item.description}</p>
+            <p className="text-gray-500 text-xxs">Price: ${item.price.toFixed(2)}</p>
             {/* Remove button */}
             <button
-              className="text-red-600 bg-red-100 border border-red-400 px-1 py-0.5 rounded transition duration-300 ease-in-out hover:bg-red-200 text-xs"
+              className="text-red-600 bg-red-100 border border-red-400 px-0.5 py-0.5 rounded transition duration-300 ease-in-out hover:bg-red-200 text-xxs"
               onClick={() => handleRemoveFromCart(item._id)}
             >
               Remove
@@ -51,21 +51,21 @@ function AddItemsToBag() {
       </div>
 
       {/* Display Subtotal And Total */}
-      <div className="flex flex-col gap-1">
-        <span className="text-white text-xs">Subtotal: ₹ {subtotal.toFixed(2)}</span>
-        <span className="text-white text-xs">Total: ₹ {total.toFixed(2)}</span>
+      <div className="flex flex-col gap-0.5">
+        <span className="text-white text-xxs">Subtotal: ₹ {subtotal.toFixed(2)}</span>
+        <span className="text-white text-xxs">Total: ₹ {total.toFixed(2)}</span>
       </div>
 
       {/* Confirm Button */}
       <button
-        className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 mt-4"
+        className="bg-green-500 text-white py-0.5 px-1 rounded hover:bg-green-700 mt-1 text-xxs"
         onClick={handleConfirm}
       >
         Confirm
       </button>
       
       {/* Link to ProductCart */}
-      <Link to="/cart" className="text-blue-500 mt-2 block underline">Go to Product Cart</Link>
+      <Link to="/cart" className="text-blue-500 mt-1 block underline text-xxs">Go to Product Cart</Link>
     </div>
   );
 }

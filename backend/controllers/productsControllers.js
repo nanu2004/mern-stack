@@ -146,7 +146,45 @@ const getProductsByCategory = async (req, res) => {
   }
 };
 
+const searchProducts = async (req, res) => {
+  const query = req.query.q; // Search query
+  const category = req.query.category; // Category query
+
+  try {
+    let queryCondition = {};
+    if (query) {
+      queryCondition.category = { $regex: query, $options: 'i' };
+    }
+    if (category) {
+      queryCondition.category = category.toLowerCase();
+    }
+
+    const filteredProducts = await ProductData.find(queryCondition);
+
+    if (filteredProducts.length > 0) {
+      return res.status(200).json({
+        status: "Success",
+        message: "Products found",
+        data: filteredProducts,
+      });
+    } else {
+      return res.status(404).json({
+        status: "Failed",
+        message: "No products found matching the search criteria",
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      status: "Failed",
+      message: "An error occurred while searching for products",
+      error: err.message,
+    });
+  }
+};
 
 
 
-export { createProduct, deleteProduct, getProduct, getAllProducts,getProductsByCategory };
+
+
+export { createProduct, deleteProduct, getProduct, getAllProducts,getProductsByCategory, searchProducts };

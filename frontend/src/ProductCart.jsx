@@ -31,6 +31,8 @@ function ProductCart() {
     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
   };
 
+  console.log("Cart Items:", cartItems); // Log cart items to check their structure and values
+
   return (
     <div className="container mx-auto py-8">
       <h2 className="text-3xl font-bold mb-8">Shopping Cart</h2>
@@ -49,7 +51,9 @@ function ProductCart() {
                 <h2 className="text-xl font-semibold mb-2">{item.title}</h2>
                 <p className="text-gray-600 mb-4">{item.description}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-green-600 font-semibold">${(item.price * item.quantity).toFixed(2)}</span>
+                  <span className="text-green-600 font-semibold">
+                    ${(!isNaN(item.price) && !isNaN(item.quantity)) ? (item.price * item.quantity).toFixed(2) : "Invalid Price"}
+                  </span>
                   <div className="flex items-center space-x-4">
                     <button
                       className="text-gray-500 focus:outline-none"

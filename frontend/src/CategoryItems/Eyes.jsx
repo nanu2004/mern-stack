@@ -54,11 +54,12 @@ function Eyes() {
                 {truncateContentBox(product.description, 50)}
               </p>
               <Link
-                to={`/product_Details/${product.id}`}
-                className="mt-4 block text-center bg-blue-500 text-white py-2 px-4 rounded-md transition duration-300 hover:bg-blue-600"
-              >
-                View Details
-              </Link>
+  to={`/product_Details/${product._id}`} // Assuming product._id is the ID of the product
+  className="mt-4 block text-center bg-blue-500 text-white py-2 px-4 rounded-md transition duration-300 hover:bg-blue-600"
+>
+  View Details
+</Link>
+
             </div>
           </div>
         ))}
