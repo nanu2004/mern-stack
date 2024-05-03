@@ -1,44 +1,31 @@
-// SearchBar.jsx
 import React, { useState } from 'react';
-import axios from 'axios';
-import { NavLink } from 'react-router-dom'; // Import NavLink for routing
-import ProductCard from './ProductCard';
 
 function SearchBar({ onSearch }) {
-  const [category, setCategory] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [query, setQuery] = useState('');
 
-  const handleSearch = async () => {
-    try {
-      const response = await axios.get(`http://localhost:3000/app/search?category=${category}`);
-      setSearchResults(response.data.data); // Store search results
-      onSearch(response.data.data); // Pass search results to the parent component
-    } catch (error) {
-      console.error('Error searching for products:', error);
-    }
+  const handleChange = (event) => {
+    setQuery(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    onSearch(query);
+    setQuery(''); // Clear the search input after submitting
   };
 
   return (
-    <div>
+    <form onSubmit={handleSubmit} className="ml-4 flex">
       <input
         type="text"
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-        placeholder="Filter by category"
-        className="border border-gray-300 rounded-md px-3 py-2 mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        value={query}
+        onChange={handleChange}
+        placeholder="Search by category"
+        className="px-2 py-1 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
       />
-      <button onClick={handleSearch} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <button type="submit" className="ml-2 px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
         Search
       </button>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-        {/* Render search results */}
-        {searchResults.map((product) => (
-          <NavLink to={`/category/${product.category}`} key={product._id} className="text-gray-500 hover:text-gray-700 transition duration-300 ease-in-out">
-            <ProductCard product={product} />
-          </NavLink>
-        ))}
-      </div>
-    </div>
+    </form>
   );
 }
 

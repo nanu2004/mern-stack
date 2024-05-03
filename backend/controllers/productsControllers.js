@@ -182,9 +182,4 @@ const searchProducts = async (req, res) => {
     });
   }
 };
-
-
-
-
-
 export { createProduct, deleteProduct, getProduct, getAllProducts,getProductsByCategory, searchProducts };

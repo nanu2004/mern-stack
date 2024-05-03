@@ -1,20 +1,17 @@
-import React from 'react';
+// Layout.jsx
+import React, { useState } from 'react';
 import Navigations from "./Navigations";
 import Footer from "./Footer";
 import { Outlet } from "react-router-dom";
-import Category from './CategoryItems/Category.jsx'; // Import Category component
-//import { AddItemsToBag } from './bag/AddItemsToBag.jsx';
+import Category from './CategoryItems/Category.jsx';
 
 function Layout() {
+  
   return (
     <div className="min-h-screen flex flex-col">
-      <Navigations />
-     
+      <Navigations  />
       <Category />
-     
-      
-      <Outlet /> {/* Use Outlet to render child components */}
-      
+      <Outlet />
       <Footer />
     </div>
   );

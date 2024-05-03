@@ -4,6 +4,8 @@ import { productsRoutes } from "./routes/productsRoutes.js";
 import { authRouter } from "./routes/authRoutes.js"; // Import authentication routes
 import { connectDB } from "./db/connect.js";
 import dotenv from "dotenv";
+import { default as wishlistRouter } from './routes/wishlistRouter.js';
+
 
 dotenv.config();
 
@@ -34,6 +36,9 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/app", productsRoutes);
 app.use("/auth", authRouter); // Mount authentication routes
+
+app.use('/wishlist', wishlistRouter);
+
 
 // Connect to the MongoDB database
 connectDB();
