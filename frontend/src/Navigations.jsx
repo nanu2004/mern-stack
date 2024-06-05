@@ -22,7 +22,7 @@ function Navigations() {
         <Link to="/home" className="text-white hover:text-gray-300">Home</Link>
         <Link to="/signup" className="text-white hover:text-gray-300">Signup</Link>
         <Link to="/login" className="text-white hover:text-gray-300">Login</Link>
-        <Link to="/products" className="text-white hover:text-gray-300">Product</Link>
+        <Link to="/Welcome" className="text-white hover:text-gray-300">Welcome</Link>
         <Link to="/bag" className="text-white hover:text-gray-300">Bag</Link>
         <Link to="/WishList" className="text-white hover:text-gray-300">WishList</Link>
         <Link to="/cart" className="text-white hover:text-gray-300">Add to Cart</Link>

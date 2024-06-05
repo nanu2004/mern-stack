@@ -1,15 +1,20 @@
-import { useState } from "react";
+// src/Login.js
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { UserContext } from "./UserContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
   const [inputValue, setInputValue] = useState({
     email: "",
     password: "",
   });
+
   const { email, password } = inputValue;
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setInputValue({
@@ -22,6 +27,7 @@ const Login = () => {
     toast.error(err, {
       position: "bottom-left",
     });
+
   const handleSuccess = (msg) =>
     toast.success(msg, {
       position: "bottom-left",
@@ -34,24 +40,20 @@ const Login = () => {
         "http://localhost:3000/auth/login",
         inputValue
       );
-      console.log(data);
-      const { success, message } = data;
+
+      const { success, message, user } = data;
       if (success) {
         handleSuccess(message);
+        setUser(user); // Set the user context
         setTimeout(() => {
-          navigate("/");
+          navigate("/welcome");
         }, 1000);
       } else {
         handleError(message);
       }
     } catch (error) {
-      console.log(error);
+      handleError(error.response.data.message);
     }
-    setInputValue({
-      ...inputValue,
-      email: "",
-      password: "",
-    });
   };
 
   return (

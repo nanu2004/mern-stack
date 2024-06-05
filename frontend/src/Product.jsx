@@ -36,7 +36,7 @@ function Product() {
     }
   };
 
-  function handleAddToCart(product) {
+  const handleAddToCart = (product) => {
     const isConfirmed = window.confirm('Do you want to add this product to your cart?');
     if (isConfirmed) {
       const existingCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -50,14 +50,38 @@ function Product() {
         alert('Product is already in the cart!');
       }
     }
-  }
+  };
 
-  function handleAddToWishlist(product) {
-    // Implement your logic to add product to the wishlist
-    // You can use localStorage or any other method to store wishlist items
-    console.log('Added to wishlist:', product);
-  }
+  const handleAddToWishlist = async (product) => {
+    try {
+      const userId = getUserId(); // Fetch user ID dynamically
+      if (!userId) {
+        console.error('User ID not available');
+        return;
+      }
 
+      const wishlistItem = {
+        userId: userId,
+        productId: product._id,
+        productName: product.name,
+        productPrice: product.price
+      };
+
+      const response = await axios.post('http://localhost:3000/wishlist/add', wishlistItem);
+      console.log('Added to wishlist:', response.data);
+      // Optionally, provide user feedback here
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+      // Optionally, provide user feedback here
+    }
+  };
+
+  const getUserId = () => {
+    const userId = localStorage.getItem('userId');
+    console.log('User ID:', userId); // Add this line for debugging
+    return userId;
+  };
+  
   return (
     <div className="container mx-auto p-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -75,9 +99,6 @@ function Product() {
                 <p className="text-gray-600 mb-4">{product.description}</p>
                 <span className="text-green-600 font-semibold">${product.price}</span>
               </div>
-            </Link>
-            <Link to="/wishlist" className="text-red-500 absolute bottom-0 right-0 m-4">
-              <FontAwesomeIcon icon={faHeart} className="hover:text-red-700" />
             </Link>
             <button
               className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"

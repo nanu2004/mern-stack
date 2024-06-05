@@ -1,5 +1,5 @@
-// The User model represents users who can register, log in, and interact with your blog website.
 import mongoose from "mongoose";
+
 const userSchema = new mongoose.Schema({
   firstname: {
     type: String,
@@ -17,8 +17,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "Please provide a valid password!"],
-    minlength:8
+    minlength: 8
   }
-  
-});
+}, { timestamps: true });
+
 export const User = mongoose.model("User", userSchema);
