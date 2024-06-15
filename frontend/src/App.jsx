@@ -1,7 +1,6 @@
-// App.js
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from '../AuthContext'; // Adjust the import path as needed
+import { AuthProvider } from './AuthContext'; // Adjust the import path as needed
 import { Layout } from './Layout';
 import Product from './Product';
 import { ProductDetails } from './ProductDetails'; // Import ProductDetails component
@@ -19,6 +18,11 @@ import Signup from './Signup'; // Import Signup component
 import Login from './Login'; // Import Login component
 import { Concealer } from './CategoryItems/Concealer'; // Import Concealer component
 import { Wishlist } from './WishList';
+import About from './About';
+import Dashboard from './Dashboard';
+import PrivateRoute from './PrivateRoute'; // Import PrivateRoute
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -41,13 +45,22 @@ function App() {
                     <Route path="/category/Concealer" element={<Concealer />} />
                     <Route path="/bag" element={<AddItemsToBag />} />
                     <Route path="/signup" element={<Signup />} />
+                    <Route path="/about" element={<About/>} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/" element={<PrivateRoute />}>
+            <Route path="dashboard" element={<Dashboard />} />
+          </Route>
                     <Route path="/Wishlist" element={<Wishlist />} />
+                    
+                    {/* Use PrivateRoute for protected routes */}
+
+
                     
                     {/* Route for ProductDetails */}
                     <Route path="/product/:productId" element={<ProductDetails />} />
                   </Route>
                 </Routes>
+                <ToastContainer />
               
               </CartProvider>
             </ProductProvider>

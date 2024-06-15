@@ -37,3 +37,31 @@ export const VerifyToken = async (req, res, next) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Middleware to check if the user has admin access
+export const isAdmin = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.userId); // Assuming `userId` is the correct field in the decoded token
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+    if (user.role === 0) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized Access. User is not an admin.',
+      });
+    }
+    // If the user is an admin, proceed to the next middleware
+    next();
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: 'Error in isAdmin middleware',
+      error,
+    });
+  }
+};

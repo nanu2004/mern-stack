@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -24,13 +25,17 @@ const Signup = () => {
 
   const handleError = (err) =>
     toast.error(err, {
-      position: "bottom-left",
+      position: "top-center",
+      toastId: "error-toast",
     });
 
-  const handleSuccess = (msg) =>
-    toast.success(msg, {
-      position: "bottom-right",
-    });
+    const handleSuccess = (msg) =>
+      toast.success(msg, {
+        position: "top-center",
+        toastId: "success-toast",
+        className: "bg-green-500 text-white", // Apply Tailwind classes for background color and text color
+      });
+    
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,17 +45,17 @@ const Signup = () => {
         inputValue
       );
       const { success, message } = data;
-      console.log(data);
       if (success) {
         handleSuccess(message);
         setTimeout(() => {
-          navigate("/signup");
+          navigate("/login");
         }, 1000);
       } else {
         handleError(message);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error:", error);
+      handleError("An error occurred. Please try again later.");
     }
     setInputValue({
       firstname: "",
@@ -59,7 +64,7 @@ const Signup = () => {
       password: "",
     });
   };
-  console.log(inputValue);
+
   return (
     <div className="form_container max-w-md mx-auto">
       <h2 className="text-2xl font-bold mb-4">Signup Account</h2>
@@ -145,4 +150,5 @@ const Signup = () => {
     </div>
   );
 };
+
 export default Signup;
