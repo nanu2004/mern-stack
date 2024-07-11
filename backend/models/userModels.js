@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please provide a valid password!"],
     minlength: 8
   },
+  
   role: {
     type: Number,
     default: 0, // Default value for role set to zero

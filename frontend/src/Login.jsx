@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAuth } from './AuthContext';
+import { useAuth } from './context/AuthContext';
 import Cookies from 'js-cookie';
 
 const Login = () => {
@@ -38,30 +38,40 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('http://localhost:3000/auth/login', inputValue);
-      const { message, token, userId } = data;
+      const response = await axios.post('http://localhost:3000/auth/login', inputValue);
+      console.log('Full response:', response); // Log the full response
 
-      if (token) {
-        handleSuccess(message);
-        Cookies.set('token', token, { expires: 1 });
-        setAuth({ user: { userId }, token });
+      if (response && response.data) {
+        const { message, token, user } = response.data;
 
-        // Redirect to the path the user was trying to access or default to dashboard
-        const from = location.state?.from?.pathname || '/dashboard';
-        navigate(from); // Perform navigation after setting auth state
+        console.log('Login response data:', response.data); // Log the response data
+
+        if (token) {
+          handleSuccess(message);
+          Cookies.set('token', token, { expires: 1 });
+          setAuth({ user, token });
+
+          console.log('Auth state after setting:', { user, token }); // Log the new auth state
+
+          const from = location.state?.from?.pathname || '/dashboard';
+          navigate(from);
+        } else {
+          handleError('Login failed');
+        }
       } else {
-        handleError('Login failed');
+        handleError('No data received from the server');
       }
     } catch (error) {
-      handleError(error.response.data.message);
+      console.error('Login error:', error); // Log the error
+      handleError(error.response?.data?.message || 'An error occurred');
     }
   };
 
-  // Check if user is already authenticated and redirect
-  if (auth && auth.token) {
-    navigate('/dashboard');
-    return null; // Or render a loading spinner or redirect immediately
-  }
+  useEffect(() => {
+    if (auth.token) {
+      navigate('/'); // Redirect to dashboard if authenticated
+    }
+  }, [auth.token, navigate]);
 
   return (
     <div className="form_container mx-auto max-w-md mt-10">

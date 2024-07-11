@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { User } from '../models/userModels.js';
-import cookieParser from 'cookie-parser'; // Import cookie-parser middleware
 
 dotenv.config();
 
@@ -9,9 +8,6 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 export const VerifyToken = async (req, res, next) => {
   try {
-    // Set up the cookie-parser middleware to parse cookies
-    cookieParser();
-
     // Get the token from the request cookies
     const token = req.cookies.token;
 
@@ -19,7 +15,7 @@ export const VerifyToken = async (req, res, next) => {
       return res.status(401).json({ message: 'Token is missing' });
     }
 
-    const decoded = jwt.decode(token); // Use jwt.decode instead of jwt.verify
+    const decoded = jwt.verify(token, JWT_SECRET_KEY); // Use jwt.verify to validate the token
     if (!decoded) {
       return res.status(401).json({ message: 'Invalid token' });
     }

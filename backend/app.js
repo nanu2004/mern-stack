@@ -5,7 +5,9 @@ import {router } from "./routes/router.js"; // Import authentication routes
 import { connectDB } from "./db/connect.js";
 import dotenv from "dotenv";
 import {wishlistRoutes} from './routes/wishlistRoutes.js';
+import categoryRoutes from "./routes/categoryRoutes.js";
 import cookieParser from 'cookie-parser'; // Import cookie-parser
+import productRoutes from "./routes/productRoutes.js";
 
 dotenv.config();
 
@@ -41,6 +43,8 @@ app.get("/", (req, res) => {
 app.use("/app", productsRoutes);
 app.use("/auth", router); // Mount authentication routes
 app.use('/wishlist', wishlistRoutes);
+app.use("/category", categoryRoutes);
+app.use("/product", productRoutes);
 
 // Connect to the MongoDB database
 connectDB();

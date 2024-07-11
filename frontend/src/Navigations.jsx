@@ -1,27 +1,21 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import SearchBar from './SearchBar';
-import { useSearch } from './SearchContext';
-import { useAuth } from './AuthContext';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
 import { toast } from 'react-toastify';
+import Cookies from 'js-cookie';
+import SearchInput from './Form/SearchInput'; // Importing SearchInput
 
 function Navigations() {
-  const { setSearchQuery } = useSearch();
   const { auth, setAuth } = useAuth();
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-  };
+  const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleLogout = () => {
     try {
-      // Clear user authentication data from localStorage
-      localStorage.removeItem('auth');
-      // Clear user authentication data from AuthContext
-      setAuth({ user: null, token: "" });
-      // Show success notification
+      Cookies.remove('token');
+      setAuth({ user: null, token: '' });
       toast.success('Logged out successfully', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -29,10 +23,10 @@ function Navigations() {
         draggable: true,
         progress: undefined,
       });
+      navigate('/login');
     } catch (error) {
-      // Show error notification if logout fails
       toast.error('Failed to logout', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -43,30 +37,72 @@ function Navigations() {
     }
   };
 
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
   return (
-    <nav className="bg-gray-800 p-4 flex flex-col md:flex-row items-center justify-between">
-      <div className="flex items-center mb-4 md:mb-0"> {/* Centering the Logo */}
+    <nav className="bg-gray-800 py-4 md:py-6 flex flex-col md:flex-row items-center justify-between">
+      <div className="flex items-center mb-4 md:mb-0">
         <span className="text-white font-bold text-lg">Your Logo</span>
       </div>
-      <div className="flex justify-center mb-4 md:mb-0"> {/* Centering the SearchBar */}
-        <SearchBar onSearch={handleSearch} />
-      </div>
-      <div className="hidden md:flex space-x-4"> {/* Navigation Links */}
-        <Link to="/home" className="text-white hover:text-gray-300">Home</Link>
-        {!auth.user && (
+      <SearchInput className="flex-1 mx-4" /> {/* Centered SearchInput */}
+      <div className="hidden md:flex space-x-4 items-center">
+        <Link to="/" className="text-white hover:text-gray-300">
+          Home
+        </Link>
+        {!auth.user ? (
           <>
-            <Link to="/signup" className="text-white hover:text-gray-300">Signup</Link>
-            <Link to="/login" className="text-white hover:text-gray-300">Login</Link>
+            <Link to="/signup" className="text-white hover:text-gray-300">
+              Signup
+            </Link>
+            <Link to="/login" className="text-white hover:text-gray-300">
+              Login
+            </Link>
           </>
+        ) : (
+          <div className="relative">
+            <button
+              className="text-white hover:text-gray-300 focus:outline-none"
+              onClick={toggleDropdown}
+            >
+              {auth?.user?.firstname} {auth?.user?.lastname}
+            </button>
+            {dropdownOpen && (
+              <ul className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-md">
+                <li>
+                  <Link
+                    to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
+                    className="block py-2 px-4 text-gray-700 hover:bg-gray-100"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    className="block py-2 px-4 text-gray-700 hover:bg-gray-100 w-full text-left"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            )}
+          </div>
         )}
-        {auth.user && (
-          <Link to="/" className="text-white hover:text-gray-300" onClick={handleLogout}>Logout</Link>
-        )}
-        <Link to="/about" className="text-white hover:text-gray-300">About</Link>
-        <Link to="/bag" className="text-white hover:text-gray-300">Bag</Link>
-        <Link to="/WishList" className="text-white hover:text-gray-300">WishList</Link>
-        <Link to="/cart" className="text-white hover:text-gray-300">Add to Cart</Link>
-        {/* Add other navigation links */}
+        <Link to="/about" className="text-white hover:text-gray-300">
+          About
+        </Link>
+        <Link to="/bag" className="text-white hover:text-gray-300">
+          Bag
+        </Link>
+        <Link to="/wishlist" className="text-white hover:text-gray-300">
+          WishList
+        </Link>
+        <Link to="/cart" className="text-white hover:text-gray-300">
+          Add to Cart
+        </Link>
       </div>
     </nav>
   );
