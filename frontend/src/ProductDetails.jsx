@@ -1,38 +1,71 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { Rate } from 'antd';
+import 'antd/dist/reset.css'; // Import Ant Design styles
 
 const ProductDetails = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
 
-  // Initial product details
   useEffect(() => {
-    if (params?.slug) getProduct();
+    if (params?.slug) {
+      getProduct();
+    }
   }, [params?.slug]);
 
-  // Get product
   const getProduct = async () => {
     try {
-      const { data } = await axios.get(
-        `http://localhost:3000/product/get-product/${params.slug}`
-      );
+      const { data } = await axios.get(`http://localhost:3000/product/get-product/${params.slug}`);
       setProduct(data?.product);
       getSimilarProduct(data?.product._id, data?.product.category._id);
+      fetchReviews(data?.product._id);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // Get similar product
   const getSimilarProduct = async (pid, cid) => {
     try {
-      const { data } = await axios.get(
-        `http://localhost:3000/product/related-product/${pid}/${cid}`
-      );
+      const { data } = await axios.get(`http://localhost:3000/product/related-product/${pid}/${cid}`);
       setRelatedProducts(data?.products);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchReviews = async (productId) => {
+    try {
+      const { data } = await axios.get(`http://localhost:3000/reviews/${productId}`);
+      setReviews(data.reviews);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const submitReview = async () => {
+    if (rating < 1 || rating > 5) {
+      alert("Rating must be between 1 and 5");
+      return;
+    }
+    try {
+      await axios.post(
+        `http://localhost:3000/reviews/add`,
+        {
+          productId: product._id,
+          rating,
+          comment
+        },
+        { withCredentials: true }
+      );
+      setRating(0);
+      setComment("");
+      fetchReviews(product._id); // Refresh reviews after submission
     } catch (error) {
       console.log(error);
     }
@@ -50,8 +83,7 @@ const ProductDetails = () => {
           />
         </div>
         <div className="w-full md:w-1/2 p-2">
-          <h1 className="text-3xl font-bold mb-4 text-center">Product Details</h1>
-          <p className="text-lg"><strong>Name:</strong> {product.name}</p>
+          <h1 className="text-3xl font-bold mb-4 text-center">{product.name}</h1>
           <p className="text-lg"><strong>Description:</strong> {product.description}</p>
           <p className="text-lg"><strong>Price:</strong> ${product.price}</p>
           <p className="text-lg"><strong>Category:</strong> {product?.category?.name}</p>
@@ -60,7 +92,48 @@ const ProductDetails = () => {
           </button>
         </div>
       </div>
+
       <hr className="my-6" />
+
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">Reviews</h2>
+        {reviews.length === 0 ? (
+          <p className="text-center">No reviews yet</p>
+        ) : (
+          reviews.map((review) => (
+            <div key={review._id} className="border p-4 mb-4 rounded shadow">
+              <div className="flex items-center">
+                <Rate disabled value={review.rating} className="mr-2" />
+                <p className="text-gray-600">{review.comment}</p>
+              </div>
+              <p className="text-sm text-gray-500 mt-2">By {review.userId.firstname} {review.userId.lastname}</p>
+            </div>
+          ))
+        )}
+      </div>
+
+      <div className="mt-6">
+        <h2 className="text-2xl font-semibold mb-4">Add a Review</h2>
+        <div className="flex items-center mb-4">
+          <Rate value={rating} onChange={setRating} />
+        </div>
+        <textarea
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          placeholder="Write your review here"
+          className="w-full p-2 border rounded"
+          rows="4"
+        ></textarea>
+        <button
+          onClick={submitReview}
+          className="mt-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200"
+        >
+          Submit Review
+        </button>
+      </div>
+
+      <hr className="my-6" />
+
       <div>
         <h2 className="text-2xl font-semibold mb-4">Similar Products</h2>
         {relatedProducts.length < 1 && (

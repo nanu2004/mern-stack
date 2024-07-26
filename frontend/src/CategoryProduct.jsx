@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../components/Layout/Layout";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+
 const CategoryProduct = () => {
   const params = useParams();
   const navigate = useNavigate();
@@ -11,10 +11,11 @@ const CategoryProduct = () => {
   useEffect(() => {
     if (params?.slug) getPrductsByCat();
   }, [params?.slug]);
+
   const getPrductsByCat = async () => {
     try {
       const { data } = await axios.get(
-        `/api/v1/product/product-category/${params.slug}`
+        `http://localhost:3000/product/product-category/${params.slug}`
       );
       setProducts(data?.products);
       setCategory(data?.category);
@@ -24,44 +25,50 @@ const CategoryProduct = () => {
   };
 
   return (
-   
-      <div className="container mt-3">
-        <h4 className="text-center">Category - {category?.name}</h4>
-        <h6 className="text-center">{products?.length} result found </h6>
-        <div className="row">
-          <div className="col-md-9 offset-1">
-            <div className="d-flex flex-wrap">
-              {products?.map((p) => (
-                <div
-                  className="card m-2"
-                  style={{ width: "18rem" }}
-                  key={p._id}
-                >
-                  <img
-                    src={`/api/v1/product/product-photo/${p._id}`}
-                    className="card-img-top"
-                    alt={p.name}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{p.name}</h5>
-                    <p className="card-text">
-                      {p.description.substring(0, 30)}...
-                    </p>
-                    <p className="card-text"> $ {p.price}</p>
+    <div className="container mt-3">
+      <h4 className="text-center">Category - {category?.name}</h4>
+      <h6 className="text-center">{products?.length} result found</h6>
+      <div className="row">
+        <div className="col-md-9 offset-1">
+          <div className="d-flex flex-wrap">
+            {products?.map((p) => (
+              <div className="card m-2" style={{ width: "18rem" }} key={p._id}>
+                <img
+                  src={`http://localhost:3000/product/product-photo/${p._id}`}
+                  className="card-img-top"
+                  alt={p.name}
+                />
+                <div className="card-body">
+                  <h5 className="card-title">{p.name}</h5>
+                  <p className="card-text">{p.description.substring(0, 30)}...</p>
+                  <p className="card-text">$ {p.price}</p>
+                  <div className="d-flex justify-content-between">
                     <button
-                      className="btn btn-primary ms-1"
+                      className="btn btn-primary"
                       onClick={() => navigate(`/product/${p.slug}`)}
                     >
                       More Details
                     </button>
-                    <button className="btn btn-secondary ms-1">
-                      ADD TO CART
-                    </button>
+                    <button
+                    className="btn btn-secondary ms-1"
+                    onClick={() => {
+                      setCart([...cart, p]);
+                      localStorage.setItem(
+                        "cart",
+                        JSON.stringify([...cart, p])
+                      );
+                      toast.success("Item Added to cart");
+                    }}
+                  >
+                    ADD TO CART
+                  </button>
+
                   </div>
                 </div>
-              ))}
-            </div>
-            {/* <div className="m-2 p-3">
+              </div>
+            ))}
+          </div>
+          {/* <div className="m-2 p-3">
             {products && products.length < total && (
               <button
                 className="btn btn-warning"
@@ -74,10 +81,9 @@ const CategoryProduct = () => {
               </button>
             )}
           </div> */}
-          </div>
         </div>
       </div>
-   
+    </div>
   );
 };
 

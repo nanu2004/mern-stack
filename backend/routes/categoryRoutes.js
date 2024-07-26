@@ -6,7 +6,8 @@ import {
   deleteCategoryCOntroller,
   singleCategoryController,
   updateCategoryController,
-} from "../controllers/categoryController.js";
+} from "../controllers/categoryController.js"
+import categoryModel from "../models/categoryModel.js";;
 
 const router = express.Router();
 
@@ -40,5 +41,14 @@ router.delete(
   isAdmin,
   deleteCategoryCOntroller
 );
+router.get('/count',VerifyToken,isAdmin ,async (req, res) => {
+  try {
+    const count = await categoryModel.countDocuments();
+    res.json({ count });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 
 export default router;

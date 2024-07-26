@@ -1,5 +1,3 @@
-// AuthContext.jsx
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
@@ -11,9 +9,9 @@ export const fetchUserData = async (setAuth) => {
     try {
       const response = await fetch('http://localhost:3000/auth/user-auth', {
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
         },
-        credentials: 'include'
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -25,6 +23,8 @@ export const fetchUserData = async (setAuth) => {
       setAuth((prevAuth) => ({ ...prevAuth, user, token }));
     } catch (error) {
       console.error('Failed to fetch user data', error);
+      Cookies.remove('token');
+      setAuth({ user: null, token: '' });
     }
   }
 };
@@ -35,9 +35,9 @@ export const fetchAdminData = async (setAuth) => {
     try {
       const response = await fetch('http://localhost:3000/auth/admin-auth', {
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
         },
-        credentials: 'include'
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -49,6 +49,8 @@ export const fetchAdminData = async (setAuth) => {
       setAuth((prevAuth) => ({ ...prevAuth, user: admin, token, isAdmin: true }));
     } catch (error) {
       console.error('Failed to fetch admin data:', error);
+      Cookies.remove('token');
+      setAuth({ user: null, token: '' });
     }
   } else {
     console.error('Token not found. Unable to fetch admin data.');
@@ -64,24 +66,21 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = Cookies.get('token');
-    if (token && auth.user) {
-      if (auth.user.role === 1) {
-        // Fetch admin data if user role is admin
+    if (token) {
+      if (auth.user?.role === 1) {
         fetchAdminData(setAuth);
       } else {
-        // Fetch regular user data otherwise
         fetchUserData(setAuth);
       }
     } else {
-      // Fetch user data if token or auth.user is missing
       fetchUserData(setAuth);
     }
-  }, []); // Ensure to include auth.user if dependency needed
+  }, [auth.user?.role]);
 
   useEffect(() => {
-    console.log('Auth state updated:', auth); // Log auth state updates
-    localStorage.setItem('auth', JSON.stringify(auth)); // Store auth in localStorage
-  }, [auth]); // Track changes in auth state
+    console.log('Auth state updated:', auth);
+    localStorage.setItem('auth', JSON.stringify(auth));
+  }, [auth]);
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>

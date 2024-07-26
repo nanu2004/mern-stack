@@ -1,18 +1,16 @@
-// routes/wishlistRoutes.js
-
 import express from 'express';
-import { addToWishlist, removeFromWishlist, getWishlistItems } from '../controllers/wishlistController.js';
-import { VerifyToken } from '../middlewares/auth.js';
+import { addToWishlist, removeFromWishlist, getWishlist } from '../controllers/wishlistController.js';
+import { VerifyToken } from '../middlewares/auth.js'; //
 
-const wishlistRoutes = express.Router();
+const router = express.Router();
 
-// Add item to wishlist
-wishlistRoutes.post('/add', VerifyToken, addToWishlist);
+// Route to add an item to the wishlist
+router.post('/add', VerifyToken, addToWishlist);
 
-// Remove item from wishlist
-wishlistRoutes.delete('/remove/:id', VerifyToken, removeFromWishlist);
+// Route to remove an item from the wishlist
+router.delete('/remove', VerifyToken, removeFromWishlist);
 
-// Get all wishlist items
-wishlistRoutes.get('/items', VerifyToken, getWishlistItems);
+// Route to get the wishlist
+router.get('/',VerifyToken, getWishlist);
 
-export { wishlistRoutes };
+export default router;
